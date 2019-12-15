@@ -7,18 +7,21 @@ namespace Day3.Extensions
 {
     public static class LocationExtensions
     {
+        public static Location ApplyMove(this Location location, Movement move)
+            => move.Direction switch
+            {
+                Direction.Up => new Location(location.X, location.Y + move.Units),
+                Direction.Down => new Location(location.X, location.Y - move.Units),
+                Direction.Left => new Location(location.X - move.Units, location.Y),
+                Direction.Right => new Location(location.X + move.Units, location.Y),
+                _ => throw new ArgumentException("Invalid move."),
+            };
+
         public static (IEnumerable<VisitedLocation> locations, VisitedLocation finalLocation) Apply(this VisitedLocation location, Movement move)
         {
             var visitedLocations = new List<VisitedLocation>();
 
-            var newLocation = move.Direction switch
-            {
-                Direction.Up => new Location(location.Location.X, location.Location.Y + move.Units),
-                Direction.Down => new Location(location.Location.X, location.Location.Y - move.Units),
-                Direction.Left => new Location(location.Location.X - move.Units, location.Location.Y),
-                Direction.Right => new Location(location.Location.X + move.Units, location.Location.Y),
-                _ => throw new ArgumentException("Invalid move."),
-            };
+            var newLocation = location.Location.ApplyMove(move);
 
             var xOffset = newLocation.X - location.Location.X;
             var yOffset = newLocation.Y - location.Location.Y;
@@ -36,28 +39,13 @@ namespace Day3.Extensions
             return (visitedLocations, visitedLocations.Last());
         }
 
-        public static IEnumerable<Location> ThatAreNotCentralPort(this IEnumerable<Location> locations)
-        {
-            foreach (var location in locations)
-            {
-                if (!IsCentralPort(location))
-                {
-                    yield return location;
-                }
-            }
-        }
+        public static IEnumerable<Location> ThatAreNotCentralPort(this IEnumerable<Location> locations) 
+            => locations.Where(location => !IsCentralPort(location));
 
-        public static bool IsCentralPort(Location location) => location.Equals(Location.CentralPort);
+        public static bool IsCentralPort(Location location) 
+            => location.Equals(Location.CentralPort);
 
-        public static IEnumerable<VisitedLocation> ThatAreNotCentralPort(this IEnumerable<VisitedLocation> locations)
-        {
-            foreach (var location in locations)
-            {
-                if (!IsCentralPort(location.Location))
-                {
-                    yield return location;
-                }
-            }
-        }
+        public static IEnumerable<VisitedLocation> ThatAreNotCentralPort(this IEnumerable<VisitedLocation> locations) 
+            => locations.Where(location => !IsCentralPort(location.Location));
     }
 }

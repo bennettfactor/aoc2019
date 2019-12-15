@@ -29,25 +29,22 @@ namespace Day3
 
         public static int FindFewestSteps(Path wireOne, Path wireTwo)
         {
-            var wireOneLocations = wireOne.GetLocationsFrom(Location.CentralPort);
-            var wireTwoLocations = wireTwo.GetLocationsFrom(Location.CentralPort);
-
-            var minStepLocations1 = wireOneLocations
-                .Where(l => !l.Location.Equals(Location.CentralPort))
+            var wireOneLocations = wireOne.GetLocationsFrom(Location.CentralPort)
+                .ThatAreNotCentralPort()
                 .GroupBy(l => l.Location)
                 .ToDictionary(grp => grp.Key, grp => grp.Min(vl => vl.StepCount));
 
-            var minStepLocations2 = wireTwoLocations
-                .Where(l => !l.Location.Equals(Location.CentralPort))
+            var wireTwoLocations = wireTwo.GetLocationsFrom(Location.CentralPort)
+                .ThatAreNotCentralPort()
                 .GroupBy(l => l.Location)
                 .ToDictionary(grp => grp.Key, grp => grp.Min(vl => vl.StepCount));
 
-            var intersectLocations = minStepLocations1.Keys.Intersect(minStepLocations2.Keys);
+            var intersections = wireOneLocations.Keys.Intersect(wireTwoLocations.Keys);
 
             int minSteps = int.MaxValue;
-            foreach (var intersection in intersectLocations)
+            foreach (var intersection in intersections)
             {
-                minSteps = Math.Min(minSteps, minStepLocations1[intersection] + minStepLocations2[intersection]);
+                minSteps = Math.Min(minSteps, wireOneLocations[intersection] + wireTwoLocations[intersection]);
             }
 
             return minSteps;

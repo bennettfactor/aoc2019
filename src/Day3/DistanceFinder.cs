@@ -10,8 +10,8 @@ namespace Day3
     {
         public static int FindDistance(Path wireOne, Path wireTwo)
         {
-            var wireOneLocations = new HashSet<Location>(wireOne.GetLocationsFromCentralPort());
-            var wireTwoLocations = new HashSet<Location>(wireTwo.GetLocationsFromCentralPort());
+            var wireOneLocations = new HashSet<Location>(wireOne.GetLocationsFrom(Location.CentralPort));
+            var wireTwoLocations = new HashSet<Location>(wireTwo.GetLocationsFrom(Location.CentralPort));
 
             var intersections = wireOneLocations
                 .Intersect(wireTwoLocations)

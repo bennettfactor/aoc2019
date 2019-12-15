@@ -29,15 +29,8 @@ namespace Day3
 
         public static int FindFewestSteps(Path wireOne, Path wireTwo)
         {
-            var wireOneLocations = wireOne.GetLocationsFrom(Location.CentralPort)
-                .ThatAreNotCentralPort()
-                .GroupBy(l => l.Location)
-                .ToDictionary(grp => grp.Key, grp => grp.Min(vl => vl.StepCount));
-
-            var wireTwoLocations = wireTwo.GetLocationsFrom(Location.CentralPort)
-                .ThatAreNotCentralPort()
-                .GroupBy(l => l.Location)
-                .ToDictionary(grp => grp.Key, grp => grp.Min(vl => vl.StepCount));
+            var wireOneLocations = wireOne.GetMinStepLocationsFrom(Location.CentralPort);
+            var wireTwoLocations = wireTwo.GetMinStepLocationsFrom(Location.CentralPort);
 
             var intersections = wireOneLocations.Keys.Intersect(wireTwoLocations.Keys);
 

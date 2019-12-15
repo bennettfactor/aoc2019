@@ -43,5 +43,11 @@ namespace Day3
 
             return locationsTraversed;
         }
+
+        public static Dictionary<Location, int> GetMinStepLocationsFrom(this Path path, Location location)
+            => path.GetLocationsFrom(Location.CentralPort)
+                .ThatAreNotCentralPort()
+                .GroupBy(l => l.Location)
+                .ToDictionary(grp => grp.Key, grp => grp.Min(vl => vl.StepCount));
     }
 }

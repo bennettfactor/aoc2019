@@ -28,14 +28,16 @@ namespace Day3
         public static IEnumerable<Path> ToPaths(this IEnumerable<string> lines)
             => lines.Select(l => l.ToPath());
 
-        public static IEnumerable<Location> GetLocationsFrom(this Path path, Location location)
+        public static IEnumerable<VisitedLocation> GetLocationsFrom(this Path path, Location location)
         {
-            var locationsTraversed = ImmutableList.Create<Location>();
+            var currentLocation = new VisitedLocation(location, 0);
+
+            var locationsTraversed = ImmutableList.Create<VisitedLocation>().Add(currentLocation);
 
             foreach (var move in path.Moves)
             {
-                var (locations, finalLocation) = location.Apply(move);
-                location = finalLocation;
+                var (locations, finalLocation) = currentLocation.Apply(move);
+                currentLocation = finalLocation;
                 locationsTraversed = locationsTraversed.AddRange(locations);
             }
 

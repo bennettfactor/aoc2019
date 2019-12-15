@@ -19,11 +19,13 @@ namespace Day3
                 .ToList();
 
             // Part 1
-            var distance = DistanceFinder.FindDistance(paths[0], paths[1]);
-            Console.WriteLine($"Distance: {distance}");
+            var distance = DistanceFinder.FindMinManhattanDistance(paths[0], paths[1]);
+            Console.WriteLine($"Min manhattan distance: {distance}");
 
             // Part 2
             // TODO: Part 2
+            var fewestDistance = DistanceFinder.FindFewestSteps(paths[0], paths[1]);
+            Console.WriteLine($"Min steps: {fewestDistance}");
 
             Console.ReadLine();
         }
